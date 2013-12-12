@@ -8,6 +8,8 @@ Inspired by markaby with some specialized additions for certain kinds of
 elements.
 
 ```ruby
+require 'paggio/now'
+
 # html! avoids outputting the doctype and <html> tags
 html! do
   div.content! do
@@ -31,6 +33,8 @@ CSS
 Inspired by SCSS with some nice CSS unit handling monkey-patching.
 
 ```ruby
+require 'paggio/now'
+
 css do
   rule '.content' do
     background :black
