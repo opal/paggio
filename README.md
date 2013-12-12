@@ -24,7 +24,9 @@ This will output:
 
 ```html
 <div id="content">
-  I like trains.
+  <p>
+    I like trains.
+  </p>
 </div>
 ```
 
