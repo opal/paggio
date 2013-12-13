@@ -132,6 +132,9 @@ With Markdown
 You'll need the `kramdown` gem.
 
 ```ruby
+require 'paggio/now'
+require 'paggio/markdown'
+
 html do
   markdown <<-MD
     Here comes a bunch of **shitty** markdown.
@@ -147,6 +150,9 @@ With Opal
 You'll need the `--pre sourcify` gem and the `opal` gem.
 
 ```ruby
+require 'paggio/now'
+require 'paggio/script'
+
 html do
   head do
     script src: 'js/opal.js'
