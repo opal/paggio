@@ -103,21 +103,6 @@ Formatter.for HTML do |f, item|
   f.print '</html>'
 end
 
-Formatter.for CSS do |f, item|
-  item.rules.reverse.each {|rule|
-    next if rule.definition.empty?
-
-    f.print "#{rule.selector} {"
-    f.indent {
-      rule.definition.each {|style|
-        f.print "#{style.name}: #{style.value}#{' !important' if style.important?};"
-      }
-    }
-    f.print '}'
-  }
-end
-
-
 Formatter.for HTML::Element do |f, item|
   if item.attributes.empty? && item.class_names.empty?
     f.print "<#{item.name}>"
@@ -157,6 +142,20 @@ Formatter.for HTML::Element do |f, item|
   }
 
   f.print "</#{item.name}>"
+end
+
+Formatter.for CSS do |f, item|
+  item.rules.reverse.each {|rule|
+    next if rule.definition.empty?
+
+    f.print "#{rule.selector} {"
+    f.indent {
+      rule.definition.each {|style|
+        f.print "#{style.name}: #{style.value}#{' !important' if style.important?};"
+      }
+    }
+    f.print '}'
+  }
 end
 
 end

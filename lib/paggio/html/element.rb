@@ -27,11 +27,11 @@ class Element < BasicObject
   attr_accessor :inner_html
 
   def initialize(owner, name, attributes = {})
-    @owner      = owner
-    @name       = name
-    @attributes = attributes
-    @children   = []
-    @class_names    = []
+    @owner       = owner
+    @name        = name
+    @attributes  = attributes
+    @children    = []
+    @class_names = []
   end
 
   def each(&block)
@@ -48,15 +48,9 @@ class Element < BasicObject
     self
   end
 
-  def text(text)
-    @children << text.to_s
-
-    self
-  end
-
   def method_missing(name, content = nil, &block)
     if content
-      self << content
+      self << ::Paggio::Utils.heredoc(content)
     end
 
     if name.to_s.end_with? ?!
@@ -91,6 +85,23 @@ class Element < BasicObject
       "#<HTML::Element(#{@name.upcase})>"
     else
       "#<HTML::Element(#{@name.upcase}): #{@children.inspect[1 .. -2]}>"
+    end
+  end
+
+  class Img < self
+    def src(url)
+      @attributes[:src] = url.to_s
+
+      self
+    end
+  end
+
+  class A < self
+    def href(url, &block)
+      @attributes[:href] = url.to_s
+      @owner.extend!(self, &block) if block
+
+      self
     end
   end
 end
