@@ -8,22 +8,20 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-require 'stringio'
-
 require 'paggio/css'
 require 'paggio/html'
-require 'paggio/format'
+require 'paggio/formatter'
 
 class Paggio
   def self.css(*args, &block)
-    CSS.new(*args, &block).format.string
+    Formatter.new.format(CSS.new(*args, &block)).to_s
   end
 
   def self.html(*args, &block)
-    HTML.new(*args, &block).format.string
+    Formatter.new.format(HTML.new(*args, &block)).to_s
   end
 
   def self.html!(&block)
-    HTML.new(&block).root!.format.string
+    Formatter.new.format(HTML.new(&block).root!).to_s
   end
 end
