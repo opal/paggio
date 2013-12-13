@@ -75,4 +75,10 @@ class CSS < BasicObject
   end
 end
 
+class HTML < BasicObject
+  def style(&block)
+    (@current || @roots) << CSS.new(&block)
+  end
+end
+
 end

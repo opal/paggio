@@ -23,7 +23,7 @@ class Element < BasicObject
     end
   end
 
-  attr_reader   :name, :attributes
+  attr_reader   :name, :attributes, :class_names
   attr_accessor :inner_html
 
   def initialize(owner, name, attributes = {})
@@ -31,7 +31,7 @@ class Element < BasicObject
     @name       = name
     @attributes = attributes
     @children   = []
-    @class      = []
+    @class_names    = []
   end
 
   def each(&block)
@@ -63,7 +63,7 @@ class Element < BasicObject
       @attributes[:id] = name[0 .. -2]
     else
       @last = name
-      @class.push(name)
+      @class_names.push(name)
     end
 
     @owner.extend!(self, &block) if block
@@ -74,8 +74,8 @@ class Element < BasicObject
   def [](*names)
     return unless @last
 
-    @class.delete(@last)
-    @class.push([@last, *names].join('-'))
+    @class_names.delete(@last)
+    @class_names.push([@last, *names].join('-'))
 
     self
   end

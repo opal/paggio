@@ -13,6 +13,18 @@ require 'stringio'
 class Paggio
 
 class Formatter
+  def self.to_h
+    @formatters ||= {}
+  end
+
+  def self.for(klass, &block)
+    if block
+      to_h[klass] = block
+    else
+      to_h[klass]
+    end
+  end
+
   OPTIONS = { indent: 0 }
 
   def initialize(io = nil, options = {})
@@ -28,74 +40,12 @@ class Formatter
   end
 
   def format(item)
-    case item
-    when HTML
-      case item.version
-      when 5
-        print '<!DOCTYPE html>'
+    Formatter.to_h.each {|klass, block|
+      if klass === item
+        block.call(self, item)
+        break
       end
-
-      print '<html>'
-      indent {
-        item.each {|root|
-          format(root)
-        }
-      }
-      print '</html>'
-
-    when CSS
-      item.rules.reverse.each {|rule|
-        next if rule.definition.empty?
-
-        print "#{rule.selector} {"
-        indent {
-          rule.definition.each {|style|
-            print "#{style.name}: #{style.value}#{' !important' if style.important?};"
-          }
-        }
-        print '}'
-      }
-
-    when HTML::Element
-      if item.attributes.empty? && item.class.empty?
-        print "<#{item.name}>"
-      else
-        attrs = item.attributes.map {|name, value|
-          %Q{#{escape(name)}="#{escape(value)}"}
-        }
-
-        unless item.class.empty?
-          attrs << %Q{class="#{escape(item.class.join(' '))}"}
-        end
-
-        print "<#{item.name} #{attrs.join(' ')}>"
-      end
-
-      indent {
-        if item.inner_html
-          print item.inner_html
-        else
-          item.each {|child|
-            case child
-            when String
-              print escape(child)
-
-            when CSS
-              print '<style>'
-              indent {
-                format(child)
-              }
-              print '</style>'
-
-            else
-              format(child)
-            end
-          }
-        end
-      }
-
-      print "</#{item.name}>"
-    end
+    }
 
     self
   end
@@ -104,7 +54,6 @@ class Formatter
     @io.string
   end
 
-private
   def indent?(&block)
     !!@options[:indent]
   end
@@ -137,6 +86,77 @@ private
       '"' => '&quot;',
       "'" => '&#39;' })
   end
+end
+
+Formatter.for HTML do |f, item|
+  case item.version
+  when 5
+    f.print '<!DOCTYPE html>'
+  end
+
+  f.print '<html>'
+  f.indent {
+    item.each {|root|
+      f.format(root)
+    }
+  }
+  f.print '</html>'
+end
+
+Formatter.for CSS do |f, item|
+  item.rules.reverse.each {|rule|
+    next if rule.definition.empty?
+
+    f.print "#{rule.selector} {"
+    f.indent {
+      rule.definition.each {|style|
+        f.print "#{style.name}: #{style.value}#{' !important' if style.important?};"
+      }
+    }
+    f.print '}'
+  }
+end
+
+
+Formatter.for HTML::Element do |f, item|
+  if item.attributes.empty? && item.class_names.empty?
+    f.print "<#{item.name}>"
+  else
+    attrs = item.attributes.map {|name, value|
+      %Q{#{f.escape(name)}="#{f.escape(value)}"}
+    }
+
+    unless item.class_names.empty?
+      attrs << %Q{class="#{f.escape(item.class_names.join(' '))}"}
+    end
+
+    f.print "<#{item.name} #{attrs.join(' ')}>"
+  end
+
+  f.indent {
+    if item.inner_html
+      f.print item.inner_html
+    else
+      item.each {|child|
+        case child
+        when String
+          f.print f.escape(child)
+
+        when CSS
+          f.print '<style>'
+          f.indent {
+            f.format(child)
+          }
+          f.print '</style>'
+
+        else
+          f.format(child)
+        end
+      }
+    end
+  }
+
+  f.print "</#{item.name}>"
 end
 
 end

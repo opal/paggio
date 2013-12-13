@@ -8,8 +8,9 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
-require 'paggio/css'
+require 'paggio/utils'
 require 'paggio/html'
+require 'paggio/css'
 require 'paggio/formatter'
 
 class Paggio

@@ -67,17 +67,13 @@ class HTML < BasicObject
     self
   end
 
-  def style(&block)
-    (@current || @roots) << CSS.new(&block)
-  end
-
   def method_missing(name, *args, &block)
     if name.to_s.end_with? ?!
       return super
     end
 
     if ::String === args.first
-      content = args.shift
+      content = ::Paggio::Utils.heredoc(args.shift)
     end
 
     element = Element.new(self, name, *args)
