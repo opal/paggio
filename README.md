@@ -127,6 +127,38 @@ get '/' do
 end
 ```
 
+With Markdown
+-------------
+You'll need the `kramdown` gem.
+
+```ruby
+html do
+  markdown <<-MD
+    Here comes a bunch of **shitty** markdown.
+  MD
+end
+```
+
+Since *paggio* does internal heredoc indentation pruning, you don't have to
+worry about that.
+
+With Opal
+---------
+You'll need the `--pre sourcify` gem and the `opal` gem.
+
+```ruby
+html do
+  head do
+    script src: 'js/opal.js'
+    script src: 'js/browser.js'
+
+    script do
+      alert 'Yo dawg'
+    end
+  end
+end
+```
+
 Why?
 ----
 Because HAML and SCSS are too mainstream. On a serious note, why have
