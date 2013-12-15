@@ -60,11 +60,7 @@ class HTML < BasicObject
   end
 
   def each(&block)
-    return enum_for :each unless block
-
     @roots.each(&block)
-
-    self
   end
 
   def method_missing(name, *args, &block)

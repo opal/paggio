@@ -28,11 +28,7 @@ class Definition < BasicObject
   end
 
   def each(&block)
-    return enum_for :each unless block
-
     @style.each(&block)
-
-    self
   end
 
   def gradient(*args)

@@ -35,11 +35,7 @@ class Element < BasicObject
   end
 
   def each(&block)
-    return enum_for :each unless block
-
     @children.each(&block)
-
-    self
   end
 
   def <<(what)
