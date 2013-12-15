@@ -31,6 +31,10 @@ class Paggio
   end
 
   def self.html!(&block)
-    Formatter.new.format(HTML.new(&block).root!).to_s
+    Formatter.new.tap {|f|
+      HTML.new(&block).each {|root|
+        f.format root
+      }
+    }.to_s
   end
 end
