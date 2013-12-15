@@ -32,9 +32,6 @@ class Element < BasicObject
     end
   end
 
-  attr_reader   :name, :attributes, :class_names
-  attr_accessor :inner_html
-
   def initialize(owner, name, attributes = {})
     @owner       = owner
     @name        = name

@@ -51,7 +51,7 @@ class HTML < BasicObject
     result = block.call(self)
 
     if ::String === result
-      @current.inner_html = result
+      @current.instance_eval { @inner_html = result }
     end
 
     @current = old
@@ -82,7 +82,7 @@ class HTML < BasicObject
       @current = parent
 
       if ::String === result
-        element.inner_html = result
+        element.instance_eval { @inner_html = result }
       end
     end
 

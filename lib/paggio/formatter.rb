@@ -122,23 +122,27 @@ Formatter.for HTML do |f, item|
 end
 
 Formatter.for HTML::Element do |f, item|
-  if item.attributes.empty? && item.class_names.empty?
-    f.print "<#{item.name}>"
+  name, attributes, class_names = item.instance_eval {
+    [@name, @attributes, @class_names]
+  }
+
+  if attributes.empty? && class_names.empty?
+    f.print "<#{name}>"
   else
-    attrs = item.attributes.map {|name, value|
-      %Q{#{f.escape(name)}="#{f.escape(value)}"}
+    attrs = attributes.map {|key, value|
+      %Q{#{f.escape(key)}="#{f.escape(value)}"}
     }
 
-    unless item.class_names.empty?
-      attrs << %Q{class="#{f.escape(item.class_names.join(' '))}"}
+    unless class_names.empty?
+      attrs << %Q{class="#{f.escape(class_names.join(' '))}"}
     end
 
-    f.print "<#{item.name} #{attrs.join(' ')}>"
+    f.print "<#{name} #{attrs.join(' ')}>"
   end
 
   f.indent {
-    if item.inner_html
-      f.print item.inner_html
+    if inner = item.instance_eval { @inner_html }
+      f.print inner
     else
       item.each {|child|
         case child
@@ -159,7 +163,7 @@ Formatter.for HTML::Element do |f, item|
     end
   }
 
-  f.print "</#{item.name}>"
+  f.print "</#{name}>"
 end
 
 Formatter.for CSS do |f, item|
