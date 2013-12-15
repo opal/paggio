@@ -165,7 +165,42 @@ html do
 end
 ```
 
+Calling local methods inside the DSLs
+-------------------------------------
+Don't you just love `instance_eval`? Well, I do, but sometimes it's not the
+best tool for the job, in fact you cannot call local methods or access instance
+variables inside the DSLs since they're evaluated in another context.
+
+Well, fear not, doing that is as easy as adding a parameter to the DSL block.
+
+```ruby
+class Page
+  def initialize(title, content)
+    @title   = title
+    @content = content
+  end
+
+  def to_html
+    Paggio.html do |_|
+      _.html do
+        _.head do
+          title @title
+        end
+
+        _.body do
+          @content
+        end
+      end
+    end
+  end
+end
+
+puts Page.new("foo", "bar").to_html
+```
+
 Why?
 ----
-Because HAML and SCSS are too mainstream. On a serious note, why have
-templating systems when you can just write Ruby?
+Because HAML, SCSS and CoffeeScript are too mainstream.
+
+On a serious note, why have templating systems and syntax sugar when you can
+just write Ruby?
