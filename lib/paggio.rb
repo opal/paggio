@@ -14,6 +14,14 @@ require 'paggio/css'
 require 'paggio/formatter'
 
 class Paggio
+  def self.options(options, &block)
+    Formatter.options(options, &block)
+  end
+
+  def self.indent(options, &block)
+    options(indent: options, &block)
+  end
+
   def self.css(*args, &block)
     Formatter.new.format(CSS.new(*args, &block)).to_s
   end

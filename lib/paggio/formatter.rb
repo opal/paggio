@@ -25,7 +25,23 @@ class Formatter
     end
   end
 
-  OPTIONS = { indent: 0 }
+  def self.options(options, &block)
+    old = OPTIONS.dup
+    Utils.deep_merge!(OPTIONS, options)
+
+    result = block.call
+
+    OPTIONS.replace(old)
+
+    result
+  end
+
+  OPTIONS = {
+    indent: {
+      level: 0,
+      with:  "\t"
+    }
+  }
 
   def initialize(io = nil, options = {})
     if Hash === io
@@ -55,23 +71,25 @@ class Formatter
   end
 
   def indent?(&block)
-    !!@options[:indent]
+    @options[:indent][:level]
+  rescue
+    false
   end
 
   def indent(&block)
     if indent?
-      @options[:indent] += 1
+      @options[:indent][:level] += 1
       block.call
-      @options[:indent] -= 1
+      @options[:indent][:level] -= 1
     else
       block.call
     end
   end
 
   def print(text)
-    if level = @options[:indent]
+    if level = indent?
       text.lines.each {|line|
-        @io.puts "#{"\t" * level}#{line.chomp}"
+        @io.puts "#{@options[:indent][:with] * level}#{line.chomp}"
       }
     else
       @io.print text
