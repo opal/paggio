@@ -103,6 +103,27 @@ class Element < BasicObject
 
       self
     end
+
+    def text(text)
+      self << text
+    end
+  end
+
+  class Input < self
+    { type:         :type,
+      name:         :name,
+      value:        :value,
+      size:         :size,
+      place_holder: :placeholder,
+      read_only:    :readonly,
+      required:     :required
+    }.each {|name, attribute|
+      define_method name do |value|
+        @element[attribute] = value
+
+        self
+      end
+    }
   end
 end
 
