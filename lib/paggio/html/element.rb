@@ -27,7 +27,7 @@ class Element < BasicObject
     define_method name do |*args, &body|
       instance_exec(*args, &block)
 
-      self.do(&block) if body
+      self.do(&body) if body
       self
     end
   end
