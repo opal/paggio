@@ -173,7 +173,7 @@ Formatter.for CSS do |f, item|
     f.print "#{rule.selector} {"
     f.indent {
       rule.definition.each {|style|
-        f.print "#{style.name}: #{style.value}#{' !important' if style.important?};"
+        f.print "#{style.name}: #{style.value}#{' !important' if style.important};"
       }
     }
     f.print '}'

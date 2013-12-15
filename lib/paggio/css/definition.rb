@@ -11,7 +11,7 @@
 class Paggio; class CSS < BasicObject
 
 class Definition < BasicObject
-  Style = ::Struct.new(:name, :value, :important?)
+  Style = ::Struct.new(:name, :value, :important)
 
   def initialize(&block)
     @style = []
