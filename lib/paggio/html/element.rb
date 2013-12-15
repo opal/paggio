@@ -23,6 +23,15 @@ class Element < BasicObject
     end
   end
 
+  def self.defhelper(name, &block)
+    define_method name do |*args, &body|
+      instance_exec(*args, &block)
+
+      self.do(&block) if body
+      self
+    end
+  end
+
   attr_reader   :name, :attributes, :class_names
   attr_accessor :inner_html
 
@@ -85,23 +94,18 @@ class Element < BasicObject
   end
 
   class Img < self
-    def src(url)
+    defhelper :src do |url|
       @attributes[:src] = url.to_s
-
-      self
     end
   end
 
   class A < self
-    def href(url, &block)
+    defhelper :href do |url|
       @attributes[:href] = url.to_s
-      @owner.extend!(self, &block) if block
-
-      self
     end
 
-    def text(text)
-      self << text
+    defhelper :text do |string|
+      self << string
     end
   end
 
@@ -114,10 +118,8 @@ class Element < BasicObject
       read_only:    :readonly,
       required:     :required
     }.each {|name, attribute|
-      define_method name do |value|
+      defhelper name do |value|
         @element[attribute] = value
-
-        self
       end
     }
   end
