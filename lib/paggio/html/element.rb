@@ -64,7 +64,7 @@ class Element < BasicObject
   def [](*names)
     return unless @last
 
-    @class_names.delete(@last)
+    @class_names.pop
     @class_names.push([@last, *names].join('-'))
 
     self
