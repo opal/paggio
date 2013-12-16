@@ -8,6 +8,8 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
+
+require 'paggio/html/helpers'
 require 'paggio/html/element'
 
 class Paggio

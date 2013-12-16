@@ -8,6 +8,14 @@
 #  0. You just DO WHAT THE FUCK YOU WANT TO.
 #++
 
+require 'paggio/html/element/a'
+require 'paggio/html/element/base'
+require 'paggio/html/element/blockquote'
+require 'paggio/html/element/button'
+require 'paggio/html/element/canvas'
+require 'paggio/html/element/img'
+require 'paggio/html/element/input'
+
 class Paggio; class HTML < BasicObject
 
 class Element < BasicObject
@@ -20,15 +28,6 @@ class Element < BasicObject
       const_get(const).new(owner, name, attributes)
     else
       super
-    end
-  end
-
-  def self.defhelper(name, &block)
-    define_method name do |*args, &body|
-      instance_exec(*args, &block)
-
-      self.do(&body) if body
-      self
     end
   end
 
@@ -88,37 +87,6 @@ class Element < BasicObject
     else
       "#<HTML::Element(#{@name.upcase}): #{@children.inspect[1 .. -2]}>"
     end
-  end
-
-  class Img < self
-    defhelper :src do |url|
-      @attributes[:src] = url.to_s
-    end
-  end
-
-  class A < self
-    defhelper :href do |url|
-      @attributes[:href] = url.to_s
-    end
-
-    defhelper :text do |string|
-      self << string
-    end
-  end
-
-  class Input < self
-    { type:         :type,
-      name:         :name,
-      value:        :value,
-      size:         :size,
-      place_holder: :placeholder,
-      read_only:    :readonly,
-      required:     :required
-    }.each {|name, attribute|
-      defhelper name do |value|
-        @element[attribute] = value
-      end
-    }
   end
 end
 
