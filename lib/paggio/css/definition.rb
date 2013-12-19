@@ -159,7 +159,6 @@ class Definition < BasicObject
     self
   end
 
-private
   def style(name, value = nil, important = @important)
     if ::Array === value
       value = value.join ' '
@@ -170,6 +169,10 @@ private
     else
       @style << Style.new(name, value, important)
     end
+  end
+
+  def style!(name, value = nil)
+    style(name, value, true)
   end
 
   class Gradient
