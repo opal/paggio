@@ -32,7 +32,7 @@ class HTML < BasicObject
   end
 
   def <<(what)
-    @current << what
+    (@current || @roots) << what
   end
 
   def root!
@@ -88,7 +88,7 @@ class HTML < BasicObject
       end
     end
 
-    (@current || @roots) << element
+    self << element
 
     element
   end
