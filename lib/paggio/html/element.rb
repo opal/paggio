@@ -51,7 +51,7 @@ class Element < BasicObject
 
   def method_missing(name, content = nil, &block)
     if content
-      self << ::Paggio::Utils.heredoc(content)
+      self << ::Paggio::Utils.heredoc(content.to_s)
     end
 
     if name.to_s.end_with? ?!

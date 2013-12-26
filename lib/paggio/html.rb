@@ -70,8 +70,8 @@ class HTML < BasicObject
       return super
     end
 
-    if ::String === args.first
-      content = ::Paggio::Utils.heredoc(args.shift)
+    unless ::Hash === args.first
+      content = ::Paggio::Utils.heredoc(args.shift.to_s)
     end
 
     element = Element.new(self, name, *args)
