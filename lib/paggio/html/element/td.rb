@@ -11,8 +11,16 @@
 class Paggio; class HTML < BasicObject; class Element < BasicObject
 
 class Td < self
-  defhelper :span do |width|
-    @attributes[:colspan] = width.to_s
+  defhelper :columns do |value|
+    @attributes[:colspan] = value.to_s
+  end
+
+  defhelper :rows do |value|
+    @attributes[:rowspan] = value.to_s
+  end
+
+  defhelper :headers do |*args|
+    @attributes[:headers] = args.join(' ')
   end
 end
 
