@@ -70,7 +70,7 @@ class HTML < BasicObject
       return super
     end
 
-    unless ::Hash === args.first
+    unless args.empty? || ::Hash === args.first
       content = ::Paggio::Utils.heredoc(args.shift.to_s)
     end
 
