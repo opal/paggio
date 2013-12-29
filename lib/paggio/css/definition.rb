@@ -102,7 +102,11 @@ class Definition < BasicObject
         case name
         when :shadow
           if ::Array === value
-            value = value.join ' '
+            if ::Array === value[0]
+              value = value.map { |v| v.join ' ' }.join(', ')
+            else
+              value = value.join ' '
+            end
           end
 
           style '-moz-box-shadow', value
