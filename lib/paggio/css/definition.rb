@@ -35,6 +35,10 @@ class Definition < BasicObject
     Gradient.new(*args)
   end
 
+  def url(arg)
+    "url(#{arg.inspect})"
+  end
+
   def background(*args)
     if Gradient === args.first
       if args.length > 1
