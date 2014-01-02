@@ -9,6 +9,7 @@
 #++
 
 require 'paggio/css/unit'
+require 'paggio/css/color'
 require 'paggio/css/definition'
 
 class Paggio
