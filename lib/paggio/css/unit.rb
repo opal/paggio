@@ -11,6 +11,7 @@
 class Paggio; class CSS < BasicObject
 
 class Unit
+  TYPES      = %w[em ex ch rem vh vw vmin vmax px mm cm in pt pc s deg]
   COMPATIBLE = %w[in pt mm cm px pc].map(&:to_sym)
 
   attr_reader :type, :number
@@ -38,7 +39,7 @@ class Unit
     [@number, @type].hash
   end
 
-  %w[em ex ch rem vh vw vmin vmax px mm cm in pt pc].map(&:to_sym).each {|name|
+  TYPES.map(&:to_sym).each {|name|
     define_method name do
       Unit.new(convert(self, name), name)
     end
@@ -113,7 +114,7 @@ class Unit
   end
 
   def to_s
-    "#{@number}#{@type}"
+    "#@number#@type"
   end
 
   alias to_str to_s
@@ -152,7 +153,7 @@ end
 end; end
 
 class Numeric
-  %w[em ex ch rem vh vw vmin vmax px mm cm in pt pc].map(&:to_sym).each {|name|
+  Paggio::CSS::Unit::TYPES.map(&:to_sym).each {|name|
     define_method name do
       Paggio::CSS::Unit.new(self, name)
     end

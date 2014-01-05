@@ -134,6 +134,11 @@ class Definition < BasicObject
     style 'filter', "alpha(opacity=#{(value * 100).to_i})"
   end
 
+  def animation(*args)
+    style 'animation', args
+    style '-webkit-animation', args
+  end
+
   def method_missing(name, *args, &block)
     name      = name.to_s
     important = name.end_with? ?!
