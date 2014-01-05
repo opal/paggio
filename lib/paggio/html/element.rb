@@ -82,6 +82,14 @@ class Element < BasicObject
     self
   end
 
+  def style(attrs)
+    @attributes[:style] = attrs.map {|name, value|
+      "#{name}: #{value}"
+    }.join(';')
+
+    self
+  end
+
   def inspect
     if @children.empty?
       "#<HTML::Element(#{@name.upcase})>"
