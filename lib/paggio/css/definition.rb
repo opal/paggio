@@ -139,6 +139,12 @@ class Definition < BasicObject
     style '-webkit-animation', args
   end
 
+  def transition(*args)
+    style 'transition', args
+    style '-webkit-transition', args
+    style '-moz-transition', args
+  end
+
   def method_missing(name, *args, &block)
     name      = name.to_s
     important = name.end_with? ?!
