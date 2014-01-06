@@ -26,7 +26,11 @@ class Unit
   end
 
   def ==(other)
-    if String === other
+    unless Unit === other
+      unless other.respond_to? :to_u
+        raise TypeError, "no implicit conversion of #{other.class} into Unit"
+      end
+
       other = other.to_u
     end
 
