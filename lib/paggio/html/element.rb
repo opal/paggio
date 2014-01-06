@@ -83,12 +83,16 @@ class Element < BasicObject
     self
   end
 
-  def style(attrs)
-    @attributes[:style] = attrs.map {|name, value|
+  defhelper :style do |hash|
+    @attributes[:style] = hash.map {|name, value|
       "#{name}: #{value}"
     }.join(';')
+  end
 
-    self
+  defhelper :data do |hash|
+    hash.each {|name, value|
+      @attributes["data-#{name}"] = value.to_s
+    }
   end
 
   def inspect
