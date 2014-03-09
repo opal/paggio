@@ -69,6 +69,12 @@ describe Paggio::HTML do
     end
 
     expect(html.to_s).to eq("<i class=\"icon-legal\">\n</i>\n")
+    
+    html = Paggio.html! do
+      i.icon[:legal, :shmegal]
+    end
+
+    expect(html.to_s).to eq("<i class=\"icon-legal-shmegal\">\n</i>\n")
   end
 
   it 'sets the id' do
@@ -77,5 +83,71 @@ describe Paggio::HTML do
     end
 
     expect(html.to_s).to eq("<div id=\"omg\">\n</div>\n")
+  end
+  
+  it 'chains ids and classes' do
+    html = Paggio.html! do
+      div.omg!.wut
+    end
+
+    expect(html.to_s).to eq("<div id=\"omg\" class=\"wut\">\n</div>\n")
+  end
+  
+  it 'chains ids and attributes' do
+    html = Paggio.html! do
+      div.omg! class: :wut
+    end
+
+    expect(html.to_s).to eq("<div id=\"omg\" class=\"wut\">\n</div>\n")
+  end
+  
+  it 'chains classes and attributes' do
+    html = Paggio.html! do
+      div.wut width: 80
+    end
+
+    expect(html.to_s).to eq("<div width=\"80\" class=\"wut\">\n</div>\n")
+  end
+  
+  it 'overrides with id from attributes' do
+    html = Paggio.html! do
+      div.omg! id: 'ikr'
+    end
+
+    expect(html.to_s).to eq("<div id=\"ikr\">\n</div>\n")
+    expect(html.to_s).not_to eq("<div id=\"omg\">\n</div>\n")
+  end
+  
+  it 'coalesces classes from attributes' do
+    html = Paggio.html! do
+      div.wut class: 'rofl'
+    end
+
+    expect(html.to_s).to eq("<div class=\"wut rofl\">\n</div>\n")
+    expect(html.to_s).not_to eq("<div class=\"wut\" class=\"rofl\">n")
+    
+    html = Paggio.html! do
+      div.wut class: 'rofl idk'
+    end
+
+    expect(html.to_s).to eq("<div class=\"wut rofl idk\">\n</div>\n")
+    expect(html.to_s).not_to eq("<div class=\"wut\" class=\"rofl idk\">n")
+  end
+  
+  it 'coalesces multiple classes from attributes' do
+    html = Paggio.html! do
+      div.wut classes: %w[rofl idk]
+    end
+
+    expect(html.to_s).to eq("<div class=\"wut rofl idk\">\n</div>\n")
+    expect(html.to_s).not_to eq("<div class=\"wut\" classes=\"[&quot;rofl&quot;, &quot;idk&quot;]\">\n</div>\n")
+  end
+  
+  it 'joins class name properly with class attributes' do
+    html = Paggio.html! do
+      i.icon(class: 'illegal')[:legal]
+    end
+
+    expect(html.to_s).to eq("<i class=\"illegal icon-legal\">\n</i>\n")
   end
 end
