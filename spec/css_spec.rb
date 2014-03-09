@@ -8,7 +8,7 @@ describe Paggio::CSS do
       end
     end
 
-    css.to_s.should == "#lol {\n\tcolor: black;\n}\n"
+    expect(css.to_s).to eq("#lol {\n\tcolor: black;\n}\n")
   end
 
   it 'builds border-radius correctly' do
@@ -18,7 +18,7 @@ describe Paggio::CSS do
       end
     end
 
-    css.to_s.should == "#lol {\n\t-moz-border-radius: 5px;\n\t-webkit-border-radius: 5px;\n\tborder-radius: 5px;\n}\n"
+    expect(css.to_s).to eq("#lol {\n\t-moz-border-radius: 5px;\n\t-webkit-border-radius: 5px;\n\tborder-radius: 5px;\n}\n")
 
     css = Paggio.css do
       rule '#lol' do
@@ -26,7 +26,7 @@ describe Paggio::CSS do
       end
     end
 
-    css.to_s.should == "#lol {\n\t-moz-border-radius-topleft: 5px;\n\t-webkit-border-top-left-radius: 5px;\n\tborder-top-left-radius: 5px;\n}\n"
+    expect(css.to_s).to eq("#lol {\n\t-moz-border-radius-topleft: 5px;\n\t-webkit-border-top-left-radius: 5px;\n\tborder-top-left-radius: 5px;\n}\n")
   end
 
   it 'builds box-shadow correctly' do
@@ -36,6 +36,6 @@ describe Paggio::CSS do
       end
     end
 
-    css.to_s.should == "#lol {\n\t-moz-box-shadow: 0 0 5px black;\n\t-webkit-box-shadow: 0 0 5px black;\n\tbox-shadow: 0 0 5px black;\n}\n"
+    expect(css.to_s).to eq("#lol {\n\t-moz-box-shadow: 0 0 5px black;\n\t-webkit-box-shadow: 0 0 5px black;\n\tbox-shadow: 0 0 5px black;\n}\n")
   end
 end
