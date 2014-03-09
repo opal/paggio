@@ -11,6 +11,6 @@ end
 
 task :test do
 	FileUtils.cd 'spec' do
-		sh 'rspec css_spec.rb --backtrace --color --format doc'
+		sh 'rspec css_spec.rb html_spec.rb --backtrace --color --format doc'
 	end
 end
