@@ -146,13 +146,12 @@ class Definition < BasicObject
   end
 
   def method_missing(name, *args, &block)
-    name      = name.to_s
-    important = name.end_with? ?!
-    name      = name[0 .. -2] if important
+    name = name.to_s
 
-    @important = true if important
+    if name.end_with? ?!
+      name = name[0 .. -2]
 
-    if important && respond_to?(name)
+      @important = true
       __send__ name, *args, &block
       @important = false
 
