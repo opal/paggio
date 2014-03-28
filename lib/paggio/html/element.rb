@@ -52,19 +52,17 @@ class Element < BasicObject
   end
 
   def method_missing(name, content = nil, &block)
-
     if name.to_s.end_with? ?!
       @attributes[:id] = name[0 .. -2]
     else
-      @class_names |= [name]
-      @prefix       = name
+      @class_names << name
     end
-  
+
     if ::Hash === content
-      if content.key?(:class) or content.key?(:classes)
-        @class_names |= content.delete(:class).to_s.split | content.delete(:classes).to_a
+      if content.has_key?(:class) || content.has_key?(:classes)
+        @class_names.unshift(*(content.delete(:class).to_s.split | content.delete(:classes).to_a))
       end
-      
+
       ::Paggio::Utils.deep_merge!(@attributes, content)
     elsif content
       self << ::Paggio::Utils.heredoc(content.to_s)
@@ -76,8 +74,8 @@ class Element < BasicObject
   end
 
   def [](*names)
-    if @class_names.delete(@prefix)
-      @class_names |= [[@prefix, *names].join('-')]
+    if last = @class_names.pop
+      @class_names << [last, *names].join('-')
     end
 
     self
