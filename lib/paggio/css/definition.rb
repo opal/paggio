@@ -145,6 +145,13 @@ class Definition < BasicObject
     style '-moz-transition', args
   end
 
+  def user_select(*args)
+    style 'user-select', args
+    style '-webkit-user-select', args
+    style '-moz-user-select', args
+    style '-ms-user-select', args
+  end
+
   def method_missing(name, *args, &block)
     name = name.to_s
 
