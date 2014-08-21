@@ -65,7 +65,7 @@ class Element < BasicObject
 
       ::Paggio::Utils.deep_merge!(@attributes, content)
     elsif content
-      self << ::Paggio::Utils.heredoc(content.to_s)
+      self >> content
     end
 
     @owner.extend!(self, &block) if block
@@ -84,6 +84,11 @@ class Element < BasicObject
   def do(&block)
     @owner.extend!(self, &block)
 
+    self
+  end
+
+  def >>(content)
+    self << ::Paggio::Utils.heredoc(content.to_s)
     self
   end
 
