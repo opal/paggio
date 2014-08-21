@@ -18,6 +18,7 @@ class Input < self
     place_holder: :placeholder,
     read_only:    :readonly,
     required:     :required,
+    limit:        :maxlength
   }.each {|name, attribute|
     defhelper name do |value|
       @attributes[attribute] = value
