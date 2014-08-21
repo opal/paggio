@@ -15,7 +15,7 @@ require 'paggio/css/definition'
 class Paggio
 
 class CSS < BasicObject
-  Rule = ::Struct.new(:selector, :definition)
+  Rule = ::Struct.new(:selector, :definition, :media)
 
   def self.selector(list)
     result = ''
@@ -35,7 +35,7 @@ class CSS < BasicObject
     end
   end
 
-  attr_reader :rules
+  attr_reader :rules, :media
 
   def initialize(&block)
     ::Kernel.raise ::ArgumentError, 'no block given' unless block
@@ -60,13 +60,19 @@ class CSS < BasicObject
 
     names.each {|name|
       @selector << name
-      @current  << Rule.new(CSS.selector(@selector), Definition.new)
+      @current  << Rule.new(CSS.selector(@selector), Definition.new, @media)
 
       block.call(self)
 
       @selector.pop
       @rules << @current.pop
     }
+  end
+
+  def media(query, &block)
+    old, @media = @media, query
+    block.call(self)
+    @media = old
   end
 
   # this is needed because the methods inside the rule blocks are actually

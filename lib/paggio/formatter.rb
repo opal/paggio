@@ -170,6 +170,10 @@ Formatter.for CSS do |f, item|
   item.rules.reverse.each {|rule|
     next if rule.definition.empty?
 
+    if m = rule.media
+      f.print "@media #{m} {"
+    end
+
     f.print "#{rule.selector} {"
     f.indent {
       rule.definition.each {|style|
@@ -177,6 +181,10 @@ Formatter.for CSS do |f, item|
       }
     }
     f.print '}'
+
+    if rule.media
+      f.print '}'
+    end
   }
 end
 
