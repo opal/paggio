@@ -78,11 +78,21 @@ class Formatter
 
   def indent(&block)
     if indent?
-      @options[:indent][:level] += 1
-      block.call
-      @options[:indent][:level] -= 1
+      if block
+        @options[:indent][:level] += 1
+        block.call
+        @options[:indent][:level] -= 1
+      else
+        @options[:indent][:level] += 1
+      end
     else
-      block.call
+      block.call if block
+    end
+  end
+
+  def deindent
+    if indent?
+      @options[:indent][:level] -= 1
     end
   end
 
@@ -166,24 +176,54 @@ Formatter.for HTML::Element do |f, item|
   f.print "</#{name}>"
 end
 
+Formatter.for CSS::Definition::Style do |f, style|
+  f.print "#{style.name}: #{style.value}#{' !important' if style.important};"
+end
+
 Formatter.for CSS do |f, item|
+  item.fonts.each {|font|
+    f.print '@font-face {'
+    f.indent {
+      font.each {|style|
+        f.format style
+      }
+    }
+    f.print '}'
+  }
+
+  item.animations.each {|animation|
+    ['', '-webkit-', '-moz-', '-o-'].each {|platform|
+      f.print "@#{platform}keyframes #{animation.name} {"
+      animation.steps.each {|step|
+        f.print "#{step.value} {"
+        step.each {|style|
+          f.format style
+        }
+        f.print '}'
+      }
+      f.print '}'
+    }
+  }
+
   item.rules.reverse.each {|rule|
-    next if rule.definition.empty?
+    next if rule.empty?
 
     if m = rule.media
       f.print "@media #{m} {"
+      f.indent
     end
 
     f.print "#{rule.selector} {"
     f.indent {
-      rule.definition.each {|style|
-        f.print "#{style.name}: #{style.value}#{' !important' if style.important};"
+      rule.each {|style|
+        f.format style
       }
     }
     f.print '}'
 
     if rule.media
       f.print '}'
+      f.deindent
     end
   }
 end

@@ -38,4 +38,18 @@ describe Paggio::CSS do
 
     expect(css.to_s).to eq("#lol {\n\t-moz-box-shadow: 0 0 5px black;\n\t-webkit-box-shadow: 0 0 5px black;\n\tbox-shadow: 0 0 5px black;\n}\n")
   end
+
+  it 'builds @font-face' do
+    css = Paggio.css do
+      font 'hue' do
+        src url('test')
+      end
+    end
+
+    expect(css.to_s).to eq("@font-face {\n\tfont-family: hue;\n\tsrc: url(\"test\");\n}\n")
+  end
+
+  it 'builds @keyframes' do
+
+  end
 end

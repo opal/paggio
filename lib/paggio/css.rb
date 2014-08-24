@@ -11,12 +11,13 @@
 require 'paggio/css/unit'
 require 'paggio/css/color'
 require 'paggio/css/definition'
+require 'paggio/css/rule'
+require 'paggio/css/font'
+require 'paggio/css/animation'
 
 class Paggio
 
 class CSS < BasicObject
-  Rule = ::Struct.new(:selector, :definition, :media)
-
   def self.selector(list)
     result = ''
 
@@ -35,14 +36,16 @@ class CSS < BasicObject
     end
   end
 
-  attr_reader :rules, :media
+  attr_reader :rules, :media, :fonts, :animations
 
   def initialize(&block)
     ::Kernel.raise ::ArgumentError, 'no block given' unless block
 
-    @selector = []
-    @current  = []
-    @rules    = []
+    @selector   = []
+    @current    = []
+    @rules      = []
+    @fonts      = []
+    @animations = []
 
     if block.arity == 0
       instance_exec(&block)
@@ -60,25 +63,49 @@ class CSS < BasicObject
 
     names.each {|name|
       @selector << name
-      @current  << Rule.new(CSS.selector(@selector), Definition.new, @media)
+      @current  << Rule.new(CSS.selector(@selector), @media)
 
-      block.call(self)
+      block.call
 
       @selector.pop
       @rules << @current.pop
     }
   end
 
-  def media(query, &block)
-    old, @media = @media, query
-    block.call(self)
-    @media = old
+  def media(query, *args, &block)
+    if block
+      old, @media = @media, query
+      block.call
+      @media = old
+    else
+      method_missing(:media, query, *args)
+    end
+  end
+
+  def font(name, *args, &block)
+    if block
+      @current << Font.new(name)
+      block.call
+      @fonts << @current.pop
+    else
+      method_missing(:font, name, *args)
+    end
+  end
+
+  def animation(name, *args, &block)
+    if block
+      @current << Animation.new(name)
+      block.call
+      @animations << @current.pop
+    else
+      method_missing(:animation, name, *args)
+    end
   end
 
   # this is needed because the methods inside the rule blocks are actually
   # called on the CSS object
-  def method_missing(name, *args, &block)
-    @current.last.definition.__send__(name, *args, &block)
+  def method_missing(*args, &block)
+    @current.last.__send__(*args, &block)
   end
 end
 
