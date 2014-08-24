@@ -39,6 +39,14 @@ class Definition < BasicObject
     "url(#{arg.inspect})"
   end
 
+  def rgb(r, g, b)
+    "rgb(#{r}, #{g}, #{b}, #{a})"
+  end
+
+  def rgba(r, g, b, a)
+    "rgba(#{r}, #{g}, #{b}, #{a})"
+  end
+
   def background(*args)
     if Gradient === args.first
       if args.length > 1
