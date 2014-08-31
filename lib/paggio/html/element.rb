@@ -16,6 +16,9 @@ require 'paggio/html/element/canvas'
 require 'paggio/html/element/img'
 require 'paggio/html/element/input'
 require 'paggio/html/element/object'
+require 'paggio/html/element/option'
+require 'paggio/html/element/optgroup'
+require 'paggio/html/element/select'
 require 'paggio/html/element/td'
 
 class Paggio; class HTML < BasicObject
