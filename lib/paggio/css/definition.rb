@@ -47,6 +47,26 @@ class Definition < BasicObject
     "rgba(#{r}, #{g}, #{b}, #{a})"
   end
 
+  def rotate(angle)
+    "rotate(#{angle})"
+  end
+
+  %w[scale skew translate].each {|name|
+    define_method name do |a, b = nil|
+      if b
+        "#{name}(#{a}, #{b})"
+      else
+        "#{name}(#{a})"
+      end
+    end
+  }
+
+  %w[translateX translateY translateZ rotateX rotateY rotateZ skewX skewY scaleX scaleY].each {|name|
+    define_method name do |value|
+      "#{name}(#{value})"
+    end
+  }
+
   def background(*args)
     if Gradient === args.first
       if args.length > 1
