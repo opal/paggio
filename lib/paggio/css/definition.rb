@@ -35,9 +35,11 @@ class Definition < BasicObject
     Gradient.new(*args)
   end
 
-  def url(arg)
-    "url(#{arg.inspect})"
-  end
+  %w[url blur brightness rotate contrast grayscale invert opacity saturate sepia].each {|name|
+    define_method name do |value|
+      "#{name}(#{value})"
+    end
+  }
 
   def rgb(r, g, b)
     "rgb(#{r}, #{g}, #{b}, #{a})"
@@ -45,10 +47,6 @@ class Definition < BasicObject
 
   def rgba(r, g, b, a)
     "rgba(#{r}, #{g}, #{b}, #{a})"
-  end
-
-  def rotate(angle)
-    "rotate(#{angle})"
   end
 
   %w[scale skew translate].each {|name|
@@ -178,6 +176,22 @@ class Definition < BasicObject
     style '-webkit-user-select', args
     style '-moz-user-select', args
     style '-ms-user-select', args
+  end
+
+  def transform(*args)
+    style 'transform', args
+    style '-webkit-transform', args
+    style '-moz-transform', args
+    style '-ms-transform', args
+    style '-o-transform', args
+  end
+
+  def filter(*args)
+    style 'filter', args
+    style '-webkit-filter', args
+    style '-moz-filter', args
+    style '-ms-filter', args
+    style '-o-filter', args
   end
 
   def method_missing(name, *args, &block)
