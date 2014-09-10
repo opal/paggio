@@ -35,6 +35,10 @@ class Definition < BasicObject
     Gradient.new(*args)
   end
 
+  def url(value)
+    "url(#{value.to_s.inspect})"
+  end
+
   %w[url blur brightness rotate contrast grayscale invert opacity saturate sepia].each {|name|
     define_method name do |value|
       "#{name}(#{value})"
