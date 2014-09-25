@@ -165,8 +165,19 @@ class Definition < BasicObject
   end
 
   def animation(*args)
-    style 'animation', args
-    style '-webkit-animation', args
+    if Hash === args.first
+      if args.length == 1
+        options = args.first
+      end
+
+      options.each {|name, value|
+        style "-webkit-animation-#{name}", value
+        style "animation-#{name}", value
+      }
+    else
+      style 'animation', args
+      style '-webkit-animation', args
+    end
   end
 
   def transition(*args)
