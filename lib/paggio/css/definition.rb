@@ -97,6 +97,15 @@ class Definition < BasicObject
 
       options.each {|name, value|
         case name
+        when :top, :bottom, :left, :right
+          if ::Hash === value
+            value.each {|n, v|
+              style "border-#{name}-#{n}", v
+            }
+          else
+            style "border-#{name}", value
+          end
+
         when :radius
           if ::Hash === value
             value.each {|horizontal, value|
