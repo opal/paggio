@@ -150,6 +150,11 @@ Formatter.for HTML::Element do |f, item|
     f.print "<#{name} #{attrs.join(' ')}>"
   end
 
+  next if %w[
+    area base br col embed hr img input keygen link
+    menuitem meta param source track wbr
+  ].include?(name.to_s.downcase)
+
   f.indent {
     if inner = item.instance_eval { @inner_html }
       f.print inner
