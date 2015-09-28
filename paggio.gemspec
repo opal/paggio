@@ -1,6 +1,6 @@
 Gem::Specification.new {|s|
 	s.name     = 'paggio'
-	s.version  = '0.2.4'
+	s.version  = '0.2.5'
 	s.author   = 'meh.'
 	s.email    = 'meh@schizofreni.co'
 	s.homepage = 'http://github.com/meh/paggio'
