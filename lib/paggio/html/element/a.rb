@@ -27,7 +27,7 @@ class A < self
     media: :media,
   }.each {|name, attribute|
     defhelper name do |value|
-      @attributes[attribute] = value.to_s
+      @attributes[name] = value.to_s
     end
   }
 

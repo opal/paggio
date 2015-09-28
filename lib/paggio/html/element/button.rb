@@ -22,7 +22,7 @@ class Button < self
     target:   :formtarget,
   }.each {|name, attributes|
     defhelper name do |value|
-      @attributes[attribute] = value.to_s
+      @attributes[name] = value.to_s
     end
   }
 

@@ -16,7 +16,7 @@ class Embed < self
     width:  :width
   }.each {|name, attribute|
     defhelper name do |value|
-      @attributes[attribute] = value
+      @attributes[name] = value
     end
   }
 end
