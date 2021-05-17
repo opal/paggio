@@ -150,4 +150,14 @@ describe Paggio::HTML do
 
     expect(html.to_s).to eq("<i class=\"illegal icon-legal\">\n</i>\n")
   end
+
+  it 'allows for defered build' do
+    html = Paggio::HTML.new(defer: true) do
+      div
+    end
+    expect(html.roots!.length).to eq(0)
+
+    html.build!
+    expect(html.roots!.length).to eq(1)
+  end
 end
