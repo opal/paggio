@@ -16,22 +16,29 @@ class Paggio
 class HTML < BasicObject
   attr_reader :version
 
-  def initialize(version = 5, &block)
+  def initialize(version = 5, defer: false, &block)
     ::Kernel.raise ::ArgumentError, 'no block given' unless block
 
     @version = version
     @roots   = []
     @current = nil
 
-    if block.arity == 0
-      instance_exec(&block)
-    else
-      block.call(self)
-    end
+    @block = block
+
+    build! unless defer
   end
 
   def <<(what)
     (@current || @roots) << what
+  end
+
+  def build!(force_call: false)
+    if !force_call && @block.arity == 0
+      instance_exec(&@block)
+    else
+      @block.call(self)
+    end
+    @block = nil
   end
 
   def root!
