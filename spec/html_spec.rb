@@ -168,4 +168,18 @@ describe Paggio::HTML do
 
     expect(html.to_s).to eq("<custom-element id=\"test\" class=\"test\">\n</custom-element>\n")
   end
+
+  it 'supports text nodes' do
+    html = Paggio.html! do
+      div {
+        text "test"
+        text { "test" }
+        text "test"
+        div
+        text "test"
+      }
+    end
+
+    expect(html.to_s).to eq("<div>\n\ttest\n\ttest\n\ttest\n\t<div>\n\t</div>\n\ttest\n</div>\n")
+  end
 end

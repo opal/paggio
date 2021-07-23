@@ -71,6 +71,11 @@ class HTML < BasicObject
     @roots.each(&block)
   end
 
+  def text(*fragments, &block)
+    fragments << yield if block
+    fragments.each { |fragment| self << fragment }
+  end
+
   def method_missing(name, *args, &block)
     if name.to_s.end_with? ?!
       return super
