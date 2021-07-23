@@ -31,7 +31,7 @@ class Element < BasicObject
 
     const = name.capitalize
 
-    if const_defined?(const)
+    if !const.to_s.include?('-') && const_defined?(const)
       const_get(const).new(owner, name, attributes)
     else
       super

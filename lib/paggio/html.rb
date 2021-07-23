@@ -99,6 +99,9 @@ class HTML < BasicObject
     element
   end
 
+  # Support for custom elements
+  alias e method_missing
+
   def inspect
     if @roots.empty?
       "#<HTML(#@version)>"

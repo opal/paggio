@@ -160,4 +160,12 @@ describe Paggio::HTML do
     html.build!
     expect(html.roots!.length).to eq(1)
   end
+
+  it 'allows for custom elements' do
+    html = Paggio.html! do
+      e('custom-element').test.test!
+    end
+
+    expect(html.to_s).to eq("<custom-element id=\"test\" class=\"test\">\n</custom-element>\n")
+  end
 end
