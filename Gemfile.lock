@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    paggio (0.2.4)
+    paggio (0.3.0)
 
 GEM
   remote: https://rubygems.org/
@@ -24,3 +24,6 @@ DEPENDENCIES
   paggio!
   rake
   rspec
+
+BUNDLED WITH
+   2.1.4

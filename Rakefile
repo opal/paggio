@@ -1,10 +1,10 @@
 #! /usr/bin/env ruby
+
+require 'bundler/setup'
+require 'bundler/gem_tasks'
 require 'rake'
 
-task :default => :test
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:rspec)
 
-task :test do
-	FileUtils.cd 'spec' do
-		sh 'rspec css_spec.rb html_spec.rb --backtrace --color --format doc'
-	end
-end
+task :default => :rspec
