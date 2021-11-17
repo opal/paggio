@@ -150,4 +150,36 @@ describe Paggio::HTML do
 
     expect(html.to_s).to eq("<i class=\"illegal icon-legal\">\n</i>\n")
   end
+
+  it 'allows for defered build' do
+    html = Paggio::HTML.new(defer: true) do
+      div
+    end
+    expect(html.roots!.length).to eq(0)
+
+    html.build!
+    expect(html.roots!.length).to eq(1)
+  end
+
+  it 'allows for custom elements' do
+    html = Paggio.html! do
+      e('custom-element').test.test!
+    end
+
+    expect(html.to_s).to eq("<custom-element id=\"test\" class=\"test\">\n</custom-element>\n")
+  end
+
+  it 'supports text nodes' do
+    html = Paggio.html! do
+      div {
+        text "test"
+        text { "test" }
+        text "test"
+        div
+        text "test"
+      }
+    end
+
+    expect(html.to_s).to eq("<div>\n\ttest\n\ttest\n\ttest\n\t<div>\n\t</div>\n\ttest\n</div>\n")
+  end
 end

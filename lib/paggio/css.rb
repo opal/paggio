@@ -38,7 +38,7 @@ class CSS < BasicObject
 
   attr_reader :rules, :media, :fonts, :animations
 
-  def initialize(&block)
+  def initialize(defer: false, &block)
     ::Kernel.raise ::ArgumentError, 'no block given' unless block
 
     @selector   = []
@@ -46,12 +46,19 @@ class CSS < BasicObject
     @rules      = []
     @fonts      = []
     @animations = []
+    
+    @block      = block
 
-    if block.arity == 0
-      instance_exec(&block)
+    build! unless defer
+  end
+
+  def build!(force_call: false)
+    if !force_call && @block.arity == 0
+      instance_exec(&@block)
     else
-      block.call(self)
+      @block.call(self)
     end
+    @block = nil
   end
 
   def rule(*names, &block)
