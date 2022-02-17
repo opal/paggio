@@ -1,6 +1,8 @@
+require_relative 'lib/paggio/version'
+
 Gem::Specification.new do |spec|
 	spec.name     = 'paggio'
-	spec.version  = '0.3.0'
+	spec.version  = Paggio::VERSION
 	spec.author   = 'meh.'
 	spec.email    = 'meh@schizofreni.co'
 	spec.homepage = 'http://github.com/opal/paggio'
