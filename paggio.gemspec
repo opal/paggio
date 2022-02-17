@@ -1,15 +1,21 @@
-Gem::Specification.new {|s|
-	s.name     = 'paggio'
-	s.version  = '0.3.0'
-	s.author   = 'meh.'
-	s.email    = 'meh@schizofreni.co'
-	s.homepage = 'http://github.com/opal/paggio'
-	s.platform = Gem::Platform::RUBY
-	s.summary  = 'Ruby, HTML and CSS at war.'
-	s.license  = 'WTFPL'
+Gem::Specification.new do |spec|
+	spec.name     = 'paggio'
+	spec.version  = '0.3.0'
+	spec.author   = 'meh.'
+	spec.email    = 'meh@schizofreni.co'
+	spec.homepage = 'http://github.com/opal/paggio'
+	spec.platform = Gem::Platform::RUBY
+	spec.summary  = 'Ruby, HTML and CSS at war.'
+	spec.license  = 'WTFPL'
 
-	s.files         = `git ls-files`.split("\n")
-	s.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
-	s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-	s.require_paths = ['lib']
-}
+  # Specify which files should be added to the gem when it is released.
+  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
+  # Remove symlinks because Windows doesn't always support them.
+  files = Dir.chdir(__dir__) { `git ls-files -z`.split("\x0") }.reject(&File.method(:symlink?))
+
+  spec.files         = files.grep(%r{^(test|spec|features)/})
+  spec.test_files    = files.grep_v(%r{^(test|spec|features)/})
+  spec.executables   = files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.bindir        = 'exe'
+  spec.require_paths = ['lib']
+end
