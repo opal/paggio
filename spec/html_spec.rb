@@ -182,4 +182,19 @@ describe Paggio::HTML do
 
     expect(html.to_s).to eq("<div>\n\ttest\n\ttest\n\ttest\n\t<div>\n\t</div>\n\ttest\n</div>\n")
   end
+
+  it 'allows for nested data helper calls with a block' do
+    html = Paggio.html! do
+      div.data(test: "test") {
+        div.data(test: "test")
+      }
+    end
+
+    expect(html.to_s).to eq(<<~HTML.gsub("  ", "\t"))
+      <div data-test="test">
+        <div data-test="test">
+        </div>
+      </div>
+    HTML
+  end
 end
