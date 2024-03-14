@@ -176,7 +176,7 @@ class Numeric
   end
 end
 
-[Fixnum, Float].each {|klass|
+(Gem::Version.new(RUBY_VERSION) < Gem::Version.new('2.4.0') ? [Fixnum, Float] : [Integer, Float]).each {|klass|
   klass.class_eval {
     alias old_percent %
 
